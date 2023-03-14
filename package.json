@@ -1,0 +1,71 @@
+{
+  "name": "cqa-github-graphql-sdk",
+  "version": "2.3.1",
+  "private": false,
+  "description": "GitHub GraphQL SDK with TS and Apollo",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "run:staticwebdev": "bash ./src/run.sh > staticwebdev.json",
+    "run:json5": "json5 --out-file staticwebdev.json5.json staticwebdev.json",
+    "start": "npm run run:staticwebdev && npm run run:json5",
+    "clean": "rm -rf dist && rm -rf ./src/generated",
+    "build": "npm run build:format:fix && npm run build:sdk && npm run build:lint  && npm run build:tsc",
+    "build:tsc": "tsc",
+    "build:sdk": "npm run codegen",
+    "build:format:fix": "prettier --write ./src",
+    "build:lint": "eslint src/**/*.ts",
+    "all": "npm run clean && npm run build && npm test",
+    "codegen": "graphql-codegen --config codegen.yml",  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diberry/typescript-action.git"
+  },
+  "keywords": [
+    "graphql",
+    "github",
+    "repository",
+    "node",
+    "setup"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@graphql-codegen/add": "^3.2.1",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.8",
+    "@graphql-codegen/typescript-operations": "^2.5.8",
+    "@types/yargs": "^17.0.22",
+    "axios": "^1.2.0",
+    "dotenv": "^16.0.3",
+    "fast-sort": "^3.2.1",
+    "graphql": "^16.6.0",
+    "graphql-request": "5.1.0",
+    "isomorphic-fetch": "^3.0.0",
+    "json5": "^2.2.3",
+    "yargs": "^17.7.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.15.0",
+    "@graphql-codegen/introspection": "^2.2.1",
+    "@graphql-codegen/typescript": "^2.8.3",
+    "@graphql-codegen/typescript-resolvers": "^2.7.8",
+    "@types/isomorphic-fetch": "^0.0.36",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.11.0",
+    "@vercel/ncc": "^0.31.1",
+    "eslint": "^8.32.0",
+    "eslint-plugin-github": "^4.6.0",
+    "eslint-plugin-jest": "^27.2.1",
+    "fetch-mock": "^9.11.0",
+    "fetch-mock-jest": "^1.5.1",
+    "jest": "^29.4.1",
+    "jest-mock-extended": "^3.0.1",
+    "js-yaml": "^4.1.0",
+    "prettier": "2.5.1",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
+  }
+}

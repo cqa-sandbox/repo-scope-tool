@@ -1,0 +1,59 @@
+fragment RepoEx on Repository {
+  repositoryName: name
+  id
+  url
+  descriptionHTML
+  isArchived
+  isEmpty
+  isPrivate
+  isTemplate
+  isDisabled
+  createdAt
+  updatedAt
+  pushedAt
+  diskUsage
+  languages(first: 100) {
+    edges {
+      node {
+        name
+      }
+    }
+  }
+  watchers {
+    totalCount
+  }
+  stargazers {
+    totalCount
+  }
+  forks {
+    totalCount
+  }
+  open_issues: issues(states: [OPEN]) {
+    totalCount
+  }
+  open_prs: pullRequests(states: [OPEN]) {
+    totalCount
+  }
+}
+query OrgRepos($organization: String!, $pageSize: Int, $after: String) {
+  organization(login: $organization) {
+    repositories(
+      first: $pageSize
+      after: $after
+      orderBy: { field: STARGAZERS, direction: DESC }
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        hasNextPage
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          ...RepoEx
+        }
+      }
+    }
+  }
+}

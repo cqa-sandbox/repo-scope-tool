@@ -1,0 +1,31 @@
+schema: https://docs.github.com/public/schema.docs.graphql
+# file mask for graphql query files
+documents: ./src/graphql/*.graphql
+generates:
+  ./src/generated/graphql.sdk.ts: # output typescript file path
+    plugins:
+      - typescript
+      # for SDK generation
+      - typescript-operations
+      - typescript-graphql-request
+      # for eslint ignore
+      - add:
+          content: '/* eslint-disable */'
+config:
+  # omits __typename fields from all models
+  #skipTypename: true
+  # Flatten fragment spread and inline fragments into a simple selection set before generating.
+  flattenGeneratedTypes: true
+  # Include all fragments types when flattenGeneratedTypes is enabled.
+  flattenGeneratedTypesIncludeFragments: true
+  # Allow to override the type value of Maybe.
+  maybeValue: 'T | null | undefined'
+  typesPrefix: 'I'
+  enumPrefix: true
+  # custom GraphQL Scalars to TypeScript types map
+  scalars:
+    String: string
+    Date: string
+    ObjectID: string
+    timestamptz: string
+    uuid: string

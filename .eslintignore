@@ -1,0 +1,9 @@
+dist/
+node_modules/
+jest.config.js
+.eslintrc.json
+src/__tests__/**
+src/generated/**
+src/mockdata/**
+package/
+src/sdk/runall.ts
