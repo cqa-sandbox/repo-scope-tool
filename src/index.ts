@@ -20,6 +20,8 @@ Usage:
     --max <number> - The maximum number of items to return. Defaults to 1. -1 means all.
     --page <number> - The number of items to return per page. Defaults to 10.
     --delay <number> - The number of milliseconds to delay between requests. Defaults to 900.
+    --top <number> - The number of items to return, sorted by weight. Defaults to 5. -1 means return all.
+    --prop <string> - The property to return. Defaults to 'repositoryName'. 'all' means return all properties.
 
 `
 
@@ -52,7 +54,7 @@ async function main() {
     } else {
       const url = 'https://api.github.com/graphql'
 
-      const result = await reposCursorMgr(
+      let result = await reposCursorMgr(
         pat,
         url,
         orgName,
@@ -61,6 +63,16 @@ async function main() {
         delay,
         log
       )
+
+      const top = argv['top'] || 5
+      if (top !== -1) {
+        result = result.slice(0, top)
+      }
+
+      const prop = argv['prop'] || 'repositoryName'
+      if (prop !== 'all') {
+        result = result.map((x) => x.repositoryName)
+      }
 
       console.log(JSON.stringify(result))
     }
