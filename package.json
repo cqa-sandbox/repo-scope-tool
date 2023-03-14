@@ -8,9 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "run:staticwebdev": "bash ./src/run.sh > staticwebdev.json",
-    "run:json5": "json5 --out-file staticwebdev.json5.json staticwebdev.json",
-    "start": "npm run run:staticwebdev && npm run run:json5",
+    "start": "bash ./src/run.sh > staticwebdev.json",
     "clean": "rm -rf dist && rm -rf ./src/generated",
     "build": "npm run build:format:fix && npm run build:sdk && npm run build:lint  && npm run build:tsc",
     "build:tsc": "tsc",
@@ -18,7 +16,8 @@
     "build:format:fix": "prettier --write ./src",
     "build:lint": "eslint src/**/*.ts",
     "all": "npm run clean && npm run build && npm test",
-    "codegen": "graphql-codegen --config codegen.yml",  },
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/diberry/typescript-action.git"

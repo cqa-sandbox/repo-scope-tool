@@ -62,7 +62,7 @@ async function main() {
         log
       )
 
-      console.log(result)
+      console.log(JSON.stringify(result))
     }
   } else {
     console.log(instructions)
