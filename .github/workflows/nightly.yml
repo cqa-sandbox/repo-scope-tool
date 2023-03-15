@@ -1,0 +1,45 @@
+name: Nightly list
+
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * *"
+
+env:
+  FILENAMEANDPATH: data.json
+  TEMPDIR: nightly
+jobs:
+  collectdata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    name: GitHub data scrape repos
+    outputs:
+      output1: ${{ steps.staticwebdev.outputs.data }}    
+      output2: ${{ steps.azure_samples.outputs.data}}
+    steps:
+      - uses: actions/checkout@master
+      - name: Install and Build
+        run: |
+          npm run install
+          npm run build
+      - name: Set date in env
+        run: |
+          echo "MY_DATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
+      - name: Make temporary directory
+        run: |
+          mkdir ${{env.TEMPDIR}}                    
+      - name: Get staticwebdev (full data)
+        run: |
+          node ./dist/index.js --org staticwebdev --verbose true --max -1 --prop all --file ./${{env.TEMPDIR}}/staticwebdev.json --page 100 --pat ${{ secrets.PAT }}
+      - name: Get azure-samples (full data)
+        run: |
+          node ./dist/index.js --org azure-samples --verbose true --max -1 --prop all --file ./${{env.TEMPDIR}}/azure-samples.json --page 100 --pat ${{ secrets.PAT }}
+      - name: List files
+        id: list_files
+        run: |
+            cd ${{env.TEMPDIR}} && ls -la 
+      - name: Upload artiface
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{env.MY_DATE}}-github-data.zip # name of artifact to create
+          path: ./${{env.TEMPDIR}} # name of existing file/dir to add to artifact             
