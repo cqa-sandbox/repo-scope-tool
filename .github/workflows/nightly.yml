@@ -20,8 +20,9 @@ jobs:
       - uses: actions/checkout@master
       - name: Install and Build
         run: |
-          npm run install
-          npm run build
+          npm install
+          npm run build --if-present
+          npm run test --if-present
       - name: Set date in env
         run: |
           echo "MY_DATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
