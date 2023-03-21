@@ -29,5 +29,12 @@ export async function reposQueryGraphQlSDK(
     Authorization: `Bearer ${pat}`
   }
 
-  return await sdk.OrgRepos(variables, requestHeaders)
+  const result = await sdk.OrgRepos(variables, requestHeaders)
+
+  if (result?.organization?.repositories) {
+    return result
+  }
+  // do something with error
+  console.log(result)
+  return result
 }

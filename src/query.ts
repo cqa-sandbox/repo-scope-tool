@@ -1,6 +1,9 @@
 import { reposQueryGraphQlSDK } from './sdkQuery'
 import { getNextCursor, shouldGetNextPage } from './utils/cursor'
 import { waitfor } from './utils/utils'
+
+import { IOrgReposQuery } from './generated/graphql.sdk'
+
 /**
  * Org Repos extended (last commit, pr, issue)
  * @param sdk
@@ -42,7 +45,16 @@ export async function reposCursorMgr(
 
   do {
     log(`variables ${JSON.stringify(variables)}`)
-    const data = await reposQueryGraphQlSDK(gitHubGraphQLUrl, pat, variables)
+
+    let data: IOrgReposQuery
+
+    try {
+      data = await reposQueryGraphQlSDK(gitHubGraphQLUrl, pat, variables)
+    } catch (err: unknown) {
+      console.log(`Query Error for ${JSON.stringify(variables)}`)
+      throw err
+    }
+
     log(`data returned`)
     currentPage += 1
 

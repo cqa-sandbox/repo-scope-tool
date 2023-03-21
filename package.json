@@ -1,6 +1,6 @@
 {
   "name": "cqa-github-graphql-sdk",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "private": false,
   "description": "GitHub GraphQL SDK with TS and Apollo",
   "main": "dist/index.js",
