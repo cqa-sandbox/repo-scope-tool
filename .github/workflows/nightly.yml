@@ -34,7 +34,7 @@ jobs:
           node ./dist/index.js --org staticwebdev --verbose true --max -1 --prop all --file ./${{env.TEMPDIR}}/staticwebdev.json --page 100 --pat ${{ secrets.GITHUB_TOKEN }}
       - name: Get azure-samples (full data)
         run: |
-          node ./dist/index.js --org azure-samples --verbose true --max -1 --prop all --file ./${{env.TEMPDIR}}/azure-samples.json --page 100 --pat ${{ secrets.GITHUB_TOKEN }}
+          node ./dist/index.js --org azure-samples --verbose true --max -1 --prop all --file ./${{env.TEMPDIR}}/azure-samples.json --delay 1200 --page 100 --pat ${{ secrets.GITHUB_TOKEN }}
       - name: List files
         id: list_files
         run: |
