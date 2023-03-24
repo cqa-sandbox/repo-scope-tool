@@ -1,3 +1,10 @@
+# 3.1.0
+
+* query params
+    * sort
+    * sortdir
+    * top
+
 # 3.0.0
 
 * process.error(1) if timeout from GitHub GraphQL. This is a stop-gap for retry logic which needs to be added. 

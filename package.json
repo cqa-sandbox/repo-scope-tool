@@ -1,6 +1,6 @@
 {
   "name": "cqa-github-graphql-sdk",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": false,
   "description": "GitHub GraphQL SDK with TS and Apollo",
   "main": "dist/index.js",
@@ -16,7 +16,9 @@
     "build:format:fix": "prettier --write ./src",
     "build:lint": "eslint src/**/*.ts",
     "all": "npm run clean && npm run build && npm test",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "test:run:azuresamples": "bash scripts/sample-run-azure-samples.sh",
+    "test:run:staticwebdev": "bash scripts/sample-run-staticwebdev.sh"
   },
   "repository": {
     "type": "git",

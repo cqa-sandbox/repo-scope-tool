@@ -1,0 +1,28 @@
+[
+  {
+    "repositoryName": "blazor-starter",
+    "id": "MDEwOlJlcG9zaXRvcnkyOTczNDcwNzQ=",
+    "url": "https://github.com/staticwebdev/blazor-starter",
+    "descriptionHTML": "<div>A starter template in C# APIs and Blazor for Azure Static Web Apps</div>",
+    "isArchived": false,
+    "isEmpty": false,
+    "isPrivate": false,
+    "isTemplate": true,
+    "isDisabled": false,
+    "createdAt": "2020-09-21T13:24:51Z",
+    "updatedAt": "2023-03-20T18:12:13Z",
+    "pushedAt": "2023-02-03T09:32:53Z",
+    "diskUsage": 385,
+    "languages": [
+      "C#",
+      "HTML",
+      "CSS"
+    ],
+    "watchers": 12,
+    "stargazers": 172,
+    "forks": 83,
+    "open_issues": 5,
+    "open_prs": 2,
+    "weight": 548
+  }
+]

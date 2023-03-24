@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "preLaunchTask": "npm: build",
-            "args": ["./src/index.ts","--org", "azure-samples", "--page", "100", "--verbose", "true", "--delay", "30", "--max", "-1", "--prop", "all", "--file", "azure-samples.json", "--pat", "${env:PAT}"],
+            "args": ["./src/index.ts","--org", "azure-samples", "--page", "100", "--verbose", "true", "--delay", "2000", "--max", "300", "--prop", "all", "--file", "azure-samples.json", "--pat", "${env:PAT}", "--top","5","--sort","weight","--sortdir","desc"],
             "runtimeArgs": ["-r", "ts-node/register"],
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",

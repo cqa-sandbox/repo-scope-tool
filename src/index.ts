@@ -23,7 +23,9 @@ Usage:
     --delay <number>       - The number of milliseconds to delay between requests. Defaults to 900.
     --prop <string>        - The property to return. Defaults to 'repositoryName'. 'all' means return all properties.
     --file <string>        - The file to write the output to. 
-
+    --top <number>         - The number of items to return, sorted by weight. Defaults to 1. -1 means all.
+    --sort <string>        - The property to sort by. Defaults to 'weight'.
+    --sortdir <string>     - The direction to sort by. Defaults to 'desc' for descending. 'asc' means ascending.
 `
 
 async function main() {
@@ -37,6 +39,9 @@ async function main() {
     const maxItems = argv['max'] || 1
     const page = argv['page'] || 10
     const delay = argv['delay'] || 900
+    const top = argv['top'] || 1
+    const sort = argv['sort'] || 'weight'
+    const sortdir = argv['sortdir'] || 'desc'
 
     const log = !verbose ? noop : verbose === 'true' ? console.log : noop
     const errors: string[] = []
@@ -65,9 +70,29 @@ async function main() {
         log
       )
 
-      if (maxItems !== -1) {
+      if (sort) {
+        if (sortdir == 'asc') {
+          log(`Sorted by ${sort} ${sortdir}`)
+          result = result.sort((a, b) => a[sort] - b[sort])
+        } else {
+          log(`Sorted by ${sort} ${sortdir}`)
+          result = result.sort((a, b) => b[sort] - a[sort])
+        }
+      }
+      log(
+        `First ${sort}: ${result[0][sort]}, Last ${sort}: ${
+          result[result.length - 1][sort]
+        }`
+      )
+
+      if (top !== -1) {
+        log(`Returning top ${top}/${result.length} items`)
+        result = result.slice(0, top)
+      } else if (maxItems !== -1) {
+        log(`Returning max ${maxItems}/${result.length} items`)
         result = result.slice(0, maxItems)
-        log(`Returning ${result.length} items`)
+      } else {
+        log(`Returning all ${result.length} items`)
       }
 
       const prop = argv['prop'] || 'repositoryName'

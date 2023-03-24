@@ -1,7 +1,6 @@
 import { reposQueryGraphQlSDK } from './sdkQuery'
 import { getNextCursor, shouldGetNextPage } from './utils/cursor'
 import { waitfor } from './utils/utils'
-
 import { IOrgReposQuery } from './generated/graphql.sdk'
 
 /**

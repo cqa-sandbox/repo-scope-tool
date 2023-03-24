@@ -1,0 +1,41 @@
+[
+  {
+    "repositoryName": "cognitive-services-speech-sdk",
+    "id": "MDEwOlJlcG9zaXRvcnkxMzExNDU2OTc=",
+    "url": "https://github.com/Azure-Samples/cognitive-services-speech-sdk",
+    "descriptionHTML": "<div>Sample code for the Microsoft Cognitive Services Speech SDK</div>",
+    "isArchived": false,
+    "isEmpty": false,
+    "isPrivate": false,
+    "isTemplate": false,
+    "isDisabled": false,
+    "createdAt": "2018-04-26T11:28:25Z",
+    "updatedAt": "2023-03-23T01:21:30Z",
+    "pushedAt": "2023-03-20T07:58:05Z",
+    "diskUsage": 247574,
+    "languages": [
+      "Makefile",
+      "C++",
+      "C#",
+      "C",
+      "Shell",
+      "Perl",
+      "Java",
+      "HTML",
+      "PHP",
+      "Objective-C",
+      "JavaScript",
+      "Jupyter Notebook",
+      "Python",
+      "Ruby",
+      "Swift",
+      "Go"
+    ],
+    "watchers": 103,
+    "stargazers": 1637,
+    "forks": 1446,
+    "open_issues": 30,
+    "open_prs": 24,
+    "weight": 6480
+  }
+]
