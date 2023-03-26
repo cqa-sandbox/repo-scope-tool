@@ -1,6 +1,6 @@
 {
   "name": "cqa-github-graphql-sdk",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "private": false,
   "description": "GitHub GraphQL SDK with TS and Apollo",
   "main": "dist/index.js",
@@ -9,16 +9,20 @@
   ],
   "scripts": {
     "start": "bash ./src/run.sh > staticwebdev.json",
-    "clean": "rm -rf dist && rm -rf ./src/generated",
-    "build": "npm run build:format:fix && npm run build:sdk && npm run build:lint  && npm run build:tsc",
+    "build": "npm run build:clean && npm run build:format:fix && npm run build:sdk && npm run build:lint  && npm run build:tsc && npm run build:release",
+    "build:clean": "rm -rf dist && rm -rf ./src/generated && rm -rf package",
     "build:tsc": "tsc",
-    "build:sdk": "npm run codegen",
+    "build:sdk": "graphql-codegen --config codegen.yml",
     "build:format:fix": "prettier --write ./src",
     "build:lint": "eslint src/**/*.ts",
+    "build:release": "cross-env-shell NODE_OPTIONS=--openssl-legacy-provider ncc build dist -m  -o package",
     "all": "npm run clean && npm run build && npm test",
-    "codegen": "graphql-codegen --config codegen.yml",
     "test:run:azuresamples": "bash scripts/sample-run-azure-samples.sh",
-    "test:run:staticwebdev": "bash scripts/sample-run-staticwebdev.sh"
+    "test:run:staticwebdev": "bash scripts/sample-run-staticwebdev.sh",
+    "start:package:azuresamples": "bash scripts/start-run-azure-samples.sh",
+    "start:package:staticwebdev": "bash scripts/start-run-staticwebdev.sh",
+    "start:package:merge": "bash scripts/merge.sh",
+    "start:package:aggregate": "npm run start:package:azuresamples && npm run start:package:staticwebdev && merge.sh"
   },
   "repository": {
     "type": "git",
@@ -55,6 +59,7 @@
     "@types/jest": "^29.4.0",
     "@types/node": "^18.11.0",
     "@vercel/ncc": "^0.31.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.32.0",
     "eslint-plugin-github": "^4.6.0",
     "eslint-plugin-jest": "^27.2.1",

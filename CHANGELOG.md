@@ -1,3 +1,8 @@
+# 3.2.0
+
+* packaged to single .js file with ncc: /package/index.js
+* packaged to single .json file at /scope/repos.json
+
 # 3.1.0
 
 * query params
