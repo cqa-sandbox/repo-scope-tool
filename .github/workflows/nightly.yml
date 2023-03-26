@@ -31,5 +31,5 @@ jobs:
       - name: Upload artiface
         uses: actions/upload-artifact@v3
         with:
-          name: ${{env.MY_DATE}}-scope-github-data.zip # name of artifact to create
+          name: ${{env.MY_DATE}}-scope-repos.json # name of artifact to create
           path: ./scope/repos.json # name of existing file/dir to add to artifact             
