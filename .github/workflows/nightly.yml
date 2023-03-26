@@ -8,6 +8,7 @@ on:
 env:
   FILENAMEANDPATH: data.json
   TEMPDIR: nightly
+  PAT: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   collectdata:
     runs-on: ubuntu-latest
