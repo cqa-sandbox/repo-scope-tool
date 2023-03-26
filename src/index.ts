@@ -49,16 +49,22 @@ async function main() {
     if (!orgName) {
       errors.push('orgName is required')
     }
+    log(`orgName: ${orgName}`)
 
     if (!pat) {
       errors.push('pat is required')
     }
+    log(`pat: ${pat.substring(0, 8)}...`)
 
     if (errors.length > 0) {
       console.log(`Error: ${errors.join(', ')}`)
       console.log(instructions)
     } else {
       const url = 'https://api.github.com/graphql'
+
+      log(`maxItems: ${maxItems}`)
+      log(`page: ${page}`)
+      log(`delay: ${delay}`)
 
       let result = await reposCursorMgr(
         pat,
@@ -104,7 +110,7 @@ async function main() {
       const file = argv['file']
       if (file) {
         const fileWithPath = path.join(__dirname, `../${file}`)
-        await fs.writeFile(fileWithPath, JSON.stringify(result, null, 2))
+        await fs.writeFile(fileWithPath, JSON.stringify(result))
         log(`Wrote output to ${fileWithPath}`)
       } else {
         log(`Output to console`)
