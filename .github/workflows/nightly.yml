@@ -44,7 +44,7 @@ jobs:
           npm run test --if-present
           npm run start:package:aggregate 
           cd scope && pwd && ls -la
-          cp ./scope/repos.json ../cqa-dashboard-app/scope/${{env.MYDATE}}-config.json
+          cp ./repos.json ../cqa-dashboard-app/scope/${{env.MYDATE}}-config.json
       - name: commit file to another repo
         run: |
             pwd && ls -la
