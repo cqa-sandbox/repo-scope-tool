@@ -6,29 +6,51 @@ on:
     - cron: "0 8 * * *"
 
 env:
-  FILENAMEANDPATH: data.json
-  TEMPDIR: nightly
-  PAT: ${{ secrets.GITHUB_TOKEN }}
+  FILENAMEANDPATH: config.json
+  TEMPDIR: scope
+  SECONDREPO: cqa-sandbox/cqa-dashboard-app
+  MYDATE: $(date +"%FT%H%M")"
 jobs:
   collectdata:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
     name: GitHub data scrape repos
     outputs:
       output1: ${{ steps.staticwebdev.outputs.data }}    
-      output2: ${{ steps.azure_samples.outputs.data}}
     steps:
+      # - name: Set date in env
+      #   run: |
+      #     echo "MY_DATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
       - uses: actions/checkout@master
-      - name: Install and Build
+      - name: Install and Build # output file name scope-repos.json
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
           npm run start:package:aggregate 
+        id: generate_output
       - name: List files
         id: list_files
         run: |
             cd scope && ls -la 
+      - name: Checkout # checkout the dashboard repo as submodule of this repo
+        uses: actions/checkout@master
+        with:
+            ref: 'main'
+            repository: '${{env.SECONDREPO}}'
+            token: ${{ secrets.DASHBOARD_REPORT_PAT }}
+            path: './${{env.SECONDREPO}}'
+      - name: commit file to another repo
+        run: |
+            cp scope-repos.json ./${{env.SECONDREPO}}/${{ env.TEMPDIR }}/${{env.MYDATE}}-${{FILENAMEANDPATH}} 
+            cd ./${{env.SECONDREPO}}
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{FILENAMEANDPATH}}' "
+            git push
+            ls -la
       - name: Upload artiface
         uses: actions/upload-artifact@v3
         with:
