@@ -10,6 +10,7 @@ env:
   TEMPDIR: scope
   SECONDREPO: cqa-sandbox/cqa-dashboard-app
   MYDATE: $(date +"%FT%H%M")"
+  PAT: ${{ secrets.GITHUB_TOKEN }} # Used only for scope tool across GitHub repos
 jobs:
   collectdata:
     runs-on: ubuntu-latest
