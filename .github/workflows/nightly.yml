@@ -19,8 +19,6 @@ jobs:
       - name: Set date in env
         run: |
           echo "MYDATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
-          mkdir -p ${{env.TEMPDIR}}
-          # ls -la 
       - name: Before checkout
         run: |
           pwd && ls -la
@@ -52,7 +50,10 @@ jobs:
           npm run build --if-present
           npm run test --if-present
           npm run start:package:aggregate 
-          cd scope && pwd && ls -la
+          pwd && ls -la
+      - name: Copy from 1st repo to 2nd repo
+        run: | 
+          pwd && ls -la
           cp ./repos.json ../cqa-dashboard-app/scope/${{env.MYDATE}}-config.json
       - name: commit file to another repo
         run: |

@@ -5,5 +5,5 @@ staticwebdev=`cat ./scope/staticwebdev.json`
 echo "$staticwebdev"
 azuresamples=`cat ./scope/azuresamples.json`
 echo "$azuresamples"
-echo "{ \"staticwebdev\": $staticwebdev, \"azure-samples\": $azuresamples }" > ./scope/repos.json
-echo `cat ./scope/repos.json`
+echo "{ \"staticwebdev\": $staticwebdev, \"azure-samples\": $azuresamples }" > ./repos.json
+echo `cat ./repos.json`
