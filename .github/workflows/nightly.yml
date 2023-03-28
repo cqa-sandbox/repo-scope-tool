@@ -44,7 +44,8 @@ jobs:
             path: './${{env.SECONDREPO}}'
       - name: commit file to another repo
         run: |
-            cp repos.json ./${{env.SECONDREPO}}/${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}} 
+            ls -la
+            cp ./repos.json ./${{env.SECONDREPO}}/${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}} 
             cd ./${{env.SECONDREPO}}
             git config user.name github-actions
             git config user.email github-actions@github.com
