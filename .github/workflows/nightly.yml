@@ -54,7 +54,7 @@ jobs:
       - name: Copy from 1st repo to 2nd repo
         run: | 
           pwd && ls -la
-          cp ./repo-scope-tool/repos.json ./cqa-dashboard-app/scope/${{env.MYDATE}}-config.json
+          cp ./repo-scope-tool/repos.json ./cqa-dashboard-app/scope/config.json
           ls ./cqa-dashboard-app/scope/ -la
       - name: commit file to another repo
         run: |

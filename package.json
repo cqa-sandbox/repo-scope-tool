@@ -22,7 +22,7 @@
     "start:package:azuresamples": "bash scripts/start-run-azure-samples.sh",
     "start:package:staticwebdev": "bash scripts/start-run-staticwebdev.sh",
     "start:package:merge": "bash scripts/merge.sh",
-    "start:package:aggregate": "npm run start:package:staticwebdev && npm run start:package:merge"
+    "start:package:aggregate": "npm run start:package:azuresamples && npm run start:package:staticwebdev && npm run start:package:merge"
   },
   "repository": {
     "type": "git",
