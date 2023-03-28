@@ -55,10 +55,12 @@ jobs:
         run: | 
           pwd && ls -la
           cp ./repo-scope-tool/repos.json ./cqa-dashboard-app/scope/${{env.MYDATE}}-config.json
+          ls ./cqa-dashboard-app/scope/ -la
       - name: commit file to another repo
         run: |
+            cd ./cqa-dashboard-app
             pwd && ls -la
-            cd ../cqa-dashboard-app
+            git status
             git config user.name github-actions
             git config user.email github-actions@github.com
             git add .
