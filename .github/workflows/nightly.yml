@@ -43,12 +43,12 @@ jobs:
             path: './${{env.SECONDREPO}}'
       - name: commit file to another repo
         run: |
-            cp scope-repos.json ./${{env.SECONDREPO}}/${{ env.TEMPDIR }}/${{env.MYDATE}}-${{FILENAMEANDPATH}} 
+            cp scope-repos.json ./${{env.SECONDREPO}}/${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}} 
             cd ./${{env.SECONDREPO}}
             git config user.name github-actions
             git config user.email github-actions@github.com
             git add .
-            git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{FILENAMEANDPATH}}' "
+            git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}}' "
             git push
             ls -la
       - name: Upload artiface
