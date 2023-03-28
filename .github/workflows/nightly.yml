@@ -15,47 +15,43 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     name: GitHub data scrape repos
-    outputs:
-      output1: ${{ steps.staticwebdev.outputs.data }}    
     steps:
       - name: Set date in env
         run: |
           echo "MYDATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
           mkdir -p ${{env.TEMPDIR}}
           # ls -la 
-      - uses: actions/checkout@master
+      - name: Checkout cqa-sandbox/repo-scope-tool
+        uses: actions/checkout@master
+        with:
+          ref: 'main'
+          repository: 'cqa-sandbox/repo-scope-tool'
+          path: repo-scope-tool
+          token: ${{ secrets.DASHBOARD_REPORT_PAT }}
+      - name: Checkout cqa-sandbox/cqa-dashboard-app 
+        uses: actions/checkout@master
+        with:
+            ref: 'main'
+            repository: 'cqa-sandbox/cqa-dashboard-app'
+            token: ${{ secrets.DASHBOARD_REPORT_PAT }}
+            path: cqa-dashboard-app 
       - name: Install and Build # output file name ./scope/repos.json
         run: |
+          pwd && ls -la
+          cd repo-scope-tool
           npm install
           npm run build --if-present
           npm run test --if-present
           npm run start:package:aggregate 
-          pwd && ls -la
-        id: generate_output
-      - name: List files
-        id: list_files
-        run: |
-            cd scope && ls -la && cd ..
-      - name: Checkout # checkout the dashboard repo as submodule of this repo
-        uses: actions/checkout@master
-        with:
-            ref: 'main'
-            repository: '${{env.SECONDREPO}}'
-            token: ${{ secrets.DASHBOARD_REPORT_PAT }}
-            path: './${{env.SECONDREPO}}'
+          cd scope && pwd && ls -la
+          cp ./scope/repos.json ../cqa-dashboard-app/scope/${{env.MYDATE}}-config.json
       - name: commit file to another repo
         run: |
-            ls -la && cd .. & ls -la
-            cp ./scope/repos.json ./${{env.SECONDREPO}}/${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}} 
-            cd ./${{env.SECONDREPO}}
+            pwd && ls -la
+            cd ../cqa-dashboard-app
             git config user.name github-actions
             git config user.email github-actions@github.com
             git add .
             git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}}' "
             git push
             ls -la
-      - name: Upload artiface
-        uses: actions/upload-artifact@v3
-        with:
-          name: scope-repos.json # name of artifact to create
-          path: ./scope/repos.json # name of existing file/dir to add to artifact             
