@@ -21,6 +21,9 @@ jobs:
           echo "MYDATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
           mkdir -p ${{env.TEMPDIR}}
           # ls -la 
+      - name: Before checkout
+        run: |
+          pwd && ls -la
       - name: Checkout cqa-sandbox/repo-scope-tool
         uses: actions/checkout@master
         with:
@@ -28,6 +31,9 @@ jobs:
           repository: 'cqa-sandbox/repo-scope-tool'
           path: repo-scope-tool
           token: ${{ secrets.DASHBOARD_REPORT_PAT }}
+      - name: After repo-scope-tool # output file name ./scope/repos.json
+        run: |
+          pwd && ls -la
       - name: Checkout cqa-sandbox/cqa-dashboard-app 
         uses: actions/checkout@master
         with:
@@ -35,6 +41,9 @@ jobs:
             repository: 'cqa-sandbox/cqa-dashboard-app'
             token: ${{ secrets.DASHBOARD_REPORT_PAT }}
             path: cqa-dashboard-app 
+      - name: After cqa-dashboard-app # output file name ./scope/repos.json
+        run: |
+          pwd && ls -la            
       - name: Install and Build # output file name ./scope/repos.json
         run: |
           pwd && ls -la
