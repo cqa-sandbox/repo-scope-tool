@@ -65,7 +65,7 @@ jobs:
         id: compare
         run: | 
           cmp /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
-          echo "COMPARE=$(cmp -s /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
+          echo "COMPARE=$(cmp -s ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
           echo "${{env.COMPARE}}"
           if [[ $COMPARE ]]; then echo "true" >> "$GITHUB_OUTPUT"
       - name: Upload artiface
