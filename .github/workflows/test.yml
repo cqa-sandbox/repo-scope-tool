@@ -1,0 +1,95 @@
+name: Test list
+
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * *"
+
+env:
+  FILENAMEANDPATH: config.json
+  TEMPDIR: scope
+  SECONDREPO: cqa-sandbox/cqa-dashboard-app
+  PAT: ${{ secrets.GITHUB_TOKEN }} # Used only for scope tool across GitHub repos
+jobs:
+  collectdata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      output1: ${{ steps.compare.outputs.diff }}
+    name: GitHub data scrape repos
+    steps:
+      - name: Set date in env
+        run: |
+          echo "MYDATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
+      - name: Before checkout
+        run: |
+          echo "before checkout - root of pipeline is"
+          pwd && ls -la
+      - name: Checkout cqa-sandbox/repo-scope-tool
+        uses: actions/checkout@master
+        with:
+          ref: 'main'
+          repository: 'cqa-sandbox/repo-scope-tool'
+          path: repo-scope-tool
+          token: ${{ secrets.DASHBOARD_REPORT_PAT }}
+      - name: After repo-scope-tool # output file name ./scope/repos.json
+        run: |
+          echo "After repo-scope-tool checkout - pwd is"
+          pwd && ls -la
+      - name: Checkout cqa-sandbox/cqa-dashboard-app 
+        uses: actions/checkout@master
+        with:
+            ref: 'main'
+            repository: 'cqa-sandbox/cqa-dashboard-app'
+            token: ${{ secrets.DASHBOARD_REPORT_PAT }}
+            path: cqa-dashboard-app 
+      - name: After cqa-dashboard-app # output file name ./scope/repos.json
+        run: |
+          echo "After cqa-dashboard-app checkout - pwd is"
+          pwd && ls -la            
+      - name: Install and Build # output file name ./scope/repos.json
+        run: |
+          pwd && ls -la
+          cd repo-scope-tool
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+          npm run test:package:merge 
+          echo "After building config.json into root of scope tool - pwd is"
+          pwd && ls -la
+      - name: Previous config values are
+        run: | 
+          echo "Previous config values are"
+          cat ./cqa-dashboard-app/scope/config.json
+      - name: Compare files # Save to file and job output, print to console, if empty, no difference found
+        id: compare
+        run: | 
+          cmp /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
+          echo "COMPARE=$(cmp -s ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
+          echo "${{env.COMPARE}}"
+          if [[ $COMPARE ]]; then echo "true" >> "$GITHUB_OUTPUT"
+      - name: Upload artiface
+        uses: actions/upload-artifact@v3
+        with:
+          name: config # name of artifact to create
+          path: ./repo-scope-tool/config.json # name of existing file/dir to add to artifact 
+      - name: Copy from 1st repo to 2nd repo
+        if: ${{env.COMPARE}} == 'true'
+        run: | 
+          echo "Copy from 1st repo to 2nd repo - pwd is"
+          pwd && ls -la
+          cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
+          ls ./cqa-dashboard-app/scope/ -la
+      - name: commit file to another repo
+        if: ${{env.COMPARE}} == 'true'
+        run: |
+            echo "Commit file"
+            cd ./cqa-dashboard-app
+            pwd && ls -la
+            git status
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}}' "
+            git push
+            ls -la
