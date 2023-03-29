@@ -60,7 +60,7 @@ jobs:
       - name: Previous config values are
         run: | 
           echo "Previous config values are"
-          cat ./cqa-dashboard-app/scope/config.js
+          cat ./cqa-dashboard-app/scope/config.json
       - name: Compare files # Save to file and job output, print to console, if empty, no difference found
         id: compare
         run: | 
