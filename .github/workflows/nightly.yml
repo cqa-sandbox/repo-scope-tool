@@ -64,23 +64,24 @@ jobs:
       - name: Compare files # Save to file and job output, print to console, if empty, no difference found
         id: compare
         run: | 
-          echo "compare=$(cmp -s /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo "true" || echo "false")"
-          echo "files are the same? $compare"
-          if [[ $compare ]]; then echo "true" >> "$GITHUB_OUTPUT"
+          cmp /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
+          echo "COMPARE=$(cmp -s /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
+          echo "${{env.COMPARE}}"
+          if [[ $COMPARE ]]; then echo "true" >> "$GITHUB_OUTPUT"
       - name: Upload artiface
         uses: actions/upload-artifact@v3
         with:
           name: config # name of artifact to create
           path: ./repo-scope-tool/config.json # name of existing file/dir to add to artifact 
       - name: Copy from 1st repo to 2nd repo
-        if: steps.compare.outputs.diff == 'true'
+        if: ${{env.COMPARE}} == 'true'
         run: | 
           echo "Copy from 1st repo to 2nd repo - pwd is"
           pwd && ls -la
           cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
           ls ./cqa-dashboard-app/scope/ -la
       - name: commit file to another repo
-        if: steps.compare.outputs.diff == 'true'
+        if: ${{env.COMPARE}} == 'true'
         run: |
             echo "Commit file"
             cd ./cqa-dashboard-app
