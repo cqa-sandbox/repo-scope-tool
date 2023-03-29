@@ -5,5 +5,5 @@ staticwebdev=`cat ./staticwebdev.json`
 echo "$staticwebdev"
 azuresamples=`cat ./azuresamples.json`
 echo "$azuresamples"
-echo "{ \"staticwebdev\": $staticwebdev, \"azure-samples\": $azuresamples }" > ./repos.json
-echo `cat ./repos.json`
+echo "{ \"staticwebdev\": $staticwebdev, \"azure-samples\": $azuresamples }" > ./config.json
+echo `cat ./config.json`

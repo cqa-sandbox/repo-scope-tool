@@ -14,6 +14,8 @@ jobs:
   collectdata:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      output1: ${{ steps.compare.outputs.diff }}
     name: GitHub data scrape repos
     steps:
       - name: Set date in env
@@ -21,6 +23,7 @@ jobs:
           echo "MYDATE=$(date +"%FT%H%M")" >> $GITHUB_ENV  
       - name: Before checkout
         run: |
+          echo "before checkout - root of pipeline is"
           pwd && ls -la
       - name: Checkout cqa-sandbox/repo-scope-tool
         uses: actions/checkout@master
@@ -31,6 +34,7 @@ jobs:
           token: ${{ secrets.DASHBOARD_REPORT_PAT }}
       - name: After repo-scope-tool # output file name ./scope/repos.json
         run: |
+          echo "After repo-scope-tool checkout - pwd is"
           pwd && ls -la
       - name: Checkout cqa-sandbox/cqa-dashboard-app 
         uses: actions/checkout@master
@@ -41,6 +45,7 @@ jobs:
             path: cqa-dashboard-app 
       - name: After cqa-dashboard-app # output file name ./scope/repos.json
         run: |
+          echo "After cqa-dashboard-app checkout - pwd is"
           pwd && ls -la            
       - name: Install and Build # output file name ./scope/repos.json
         run: |
@@ -50,14 +55,34 @@ jobs:
           npm run build --if-present
           npm run test --if-present
           npm run start:package:aggregate 
+          echo "After building config.json into root of scope tool - pwd is"
           pwd && ls -la
-      - name: Copy from 1st repo to 2nd repo
+      - name: Previous config values are
         run: | 
+          echo "Previous config values are"
+          cat ./cqa-dashboard-app/scope/ -la
+      - name: Compare files # Save to file and job output, print to console, if empty, no difference found
+        id: compare
+        run: | 
+          echo "compare=$(cmp -s /repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo "true" || echo "false")"
+          echo "files are the same? $compare"
+          if [[ $compare ]]; then echo "true" >> "$GITHUB_OUTPUT"
+      - name: Upload artiface
+        uses: actions/upload-artifact@v3
+        with:
+          name: config # name of artifact to create
+          path: ./repo-scope-tool/config.json # name of existing file/dir to add to artifact 
+      - name: Copy from 1st repo to 2nd repo
+        if: steps.compare.outputs.diff == 'true'
+        run: | 
+          echo "Copy from 1st repo to 2nd repo - pwd is"
           pwd && ls -la
-          cp ./repo-scope-tool/repos.json ./cqa-dashboard-app/scope/config.json
+          cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
           ls ./cqa-dashboard-app/scope/ -la
       - name: commit file to another repo
+        if: steps.compare.outputs.diff == 'true'
         run: |
+            echo "Commit file"
             cd ./cqa-dashboard-app
             pwd && ls -la
             git status
