@@ -62,9 +62,8 @@ jobs:
       - name: Compare files # Save to file and job output, print to console, if empty, no difference found
         id: compare
         run: | 
-          cmp .//repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
           echo "COMPARE=$(cmp -s ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
-          echo "${{env.COMPARE}}"
+          echo "compare='${{env.COMPARE}}'"
       - name: Upload artiface
         uses: actions/upload-artifact@v3
         with:
