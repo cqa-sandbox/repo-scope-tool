@@ -70,6 +70,7 @@ jobs:
           needToCommit=${{env.COMPARE}}
           cmp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json > ./repo-scope-tool/diff.txt
           echo "$(cat ./repo-scope-tool/diff.txt)"
+          echo "Copy from 1st repo to 2nd repov: ${{env.COMPARE}}"
       - name: Upload artiface
         uses: actions/upload-artifact@v3
         with:
