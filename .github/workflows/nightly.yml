@@ -73,16 +73,21 @@ jobs:
           name: config # name of artifact to create
           path: ./repo-scope-tool/config.json # name of existing file/dir to add to artifact 
       - name: Copy from 1st repo to 2nd repo
-        if: ${{env.COMPARE}} == 'true'
         run: | 
-          echo "Copy from 1st repo to 2nd repo - pwd is"
-          pwd && ls -la
-          cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
-          ls ./cqa-dashboard-app/scope/ -la
+          needToCopy=${{env.COMPARE}}
+          if[[ $needToCopy == "true" ]]; then
+            echo "Copy from 1st repo to 2nd repov: ${{env.COMPARE}}"
+            pwd && ls -la
+            cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
+            ls ./cqa-dashboard-app/scope/ -la
+          else
+            echo "Copy from 1st repo to 2nd repo: ${{env.COMPARE}}" 
+          fi
       - name: commit file to another repo
-        if: ${{env.COMPARE}} == 'true'
         run: |
-            echo "Commit file"
+          needToCommit=${{env.COMPARE}}
+          if[[ $needToCommit == "true" ]]; then
+            echo "commit file to another repo: ${{env.COMPARE}}"
             cd ./cqa-dashboard-app
             pwd && ls -la
             git status
@@ -92,3 +97,6 @@ jobs:
             git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}}' "
             git push
             ls -la
+          else
+            echo "commit file to another repo: ${{env.COMPARE}}" 
+          fi
