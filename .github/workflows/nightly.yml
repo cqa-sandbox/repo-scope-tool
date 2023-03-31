@@ -75,7 +75,7 @@ jobs:
       - name: Copy from 1st repo to 2nd repo
         run: | 
           needToCopy=${{env.COMPARE}}
-          if[[ $needToCopy == "true" ]]; then
+          if [[ $needToCopy == "true" ]]; then
             echo "Copy from 1st repo to 2nd repov: ${{env.COMPARE}}"
             pwd && ls -la
             cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
@@ -86,7 +86,7 @@ jobs:
       - name: commit file to another repo
         run: |
           needToCommit=${{env.COMPARE}}
-          if[[ $needToCommit == "true" ]]; then
+          if [[ $needToCommit == "true" ]]; then
             echo "commit file to another repo: ${{env.COMPARE}}"
             cd ./cqa-dashboard-app
             pwd && ls -la
