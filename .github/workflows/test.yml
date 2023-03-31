@@ -1,4 +1,4 @@
-name: Test list
+name: Test
 
 on: 
   workflow_dispatch:
@@ -52,7 +52,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-          npm run test:package:merge 
+          npm run start:package:aggregate 
           echo "After building config.json into root of scope tool - pwd is"
           pwd && ls -la
       - name: Previous config values are
@@ -62,30 +62,6 @@ jobs:
       - name: Compare files # Save to file and job output, print to console, if empty, no difference found
         id: compare
         run: | 
+          echo "Compare true/false only"
           echo "COMPARE=$(cmp -s ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
-          echo "compare='${{env.COMPARE}}'"
-      - name: Upload artiface
-        uses: actions/upload-artifact@v3
-        with:
-          name: config # name of artifact to create
-          path: ./repo-scope-tool/config.json # name of existing file/dir to add to artifact 
-      - name: Copy from 1st repo to 2nd repo
-        if: ${{env.COMPARE}} == 'true'
-        run: | 
-          echo "Copy from 1st repo to 2nd repo - pwd is"
-          pwd && ls -la
-          cp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json
-          ls ./cqa-dashboard-app/scope/ -la
-      - name: commit file to another repo
-        if: ${{env.COMPARE}} == 'true'
-        run: |
-            echo "Commit file"
-            cd ./cqa-dashboard-app
-            pwd && ls -la
-            git status
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-            git add .
-            git commit -m "generated '${{ env.TEMPDIR }}/${{env.MYDATE}}-${{env.FILENAMEANDPATH}}' "
-            git push
-            ls -la
+          echo "Files did/didn't '$COMPARE' '${{env.COMPARE}}'"
