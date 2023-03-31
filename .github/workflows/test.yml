@@ -66,5 +66,4 @@ jobs:
           echo "COMPARE=$(cmp -s ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json && echo 'true' || echo 'false')" >> $GITHUB_ENV  
           echo "Files did/didn't '$COMPARE' '${{env.COMPARE}}'"
           needToCommit=${{env.COMPARE}}
-          cmp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json > ./repo-scope-tool/diff.txt
-          cat diff.txt
+          cmp ./repo-scope-tool/config.json ./cqa-dashboard-app/scope/config.json > ./repo-scope-tool/diff.txt && cat ./repo-scope-tool/diff.txt
